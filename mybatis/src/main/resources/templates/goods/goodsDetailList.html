@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+                layout:decorate="~{layout/default}">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h1style.css}">
+</head>
+
+<th:block layout:fragment="customContent">
+    <h1 th:text="${title}"></h1>
+    <table>
+        <thead>
+        <tr>
+            <th>상품 코드</th>
+            <th>상품명</th>
+            <th>상품 가격</th>
+            <th>판매자 아이디</th>
+            <th>판매자 이름</th>
+            <th>판매자 이메일</th>
+            <th>상품 등록일자</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:unless="${goodsDetailList != null}">
+                <td colspan="7">등록된 상품의 정보가 없습니다</td>
+            </tr>
+            <tr th:if="${goodsDetailList != null}" \
+                th:each="list : ${goodsDetailList}" th:object="${list.memberInfo}">
+                <td th:text="${list.goodsCode}">상품코드</td>
+                <td th:text="${list.goodsName}">상품명</td>
+                <td th:text="${#numbers.formatInteger(list.goodsPrice, 3, 'COMMA') + '원'}">상품가격</td>
+                <td th:text="${list.goodsSellerId}">판매자아이디</td>
+                <td th:text="${list.memberInfo.memberName}">판매자이름</td>
+                <td th:text="*{memberEmail}">판매자이메일</td>
+                <td th:text="${list.goodsRegDate}">상품등록일자</td>
+                <td><a th:href="@{/goods/modifyGoods(goodsId=${list.goodsCode})}">수정</a></td>
+                <td><a th:href="@{/goods/removeGoods(goodsId=${list.goodsCode})}">삭제</a></td>
+
+            </tr>
+        </tbody>
+    </table>
+</th:block>
+<th:block layout:fragment="customJsFile">
+    <script th:src="@{/js/jquery-3.7.1.js}"></script>
+</th:block>
+<th:block layout:fragment="customJs">
+    <script>
+
+    </script>
+</th:block>
