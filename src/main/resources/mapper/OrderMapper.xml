@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart.mybatis.order.mapper.OrderMapper">
+
+    <resultMap id="orderResultMap" type="order">
+        <id     column="o_num"      property="orderNumber"/>
+        <result column="o_id"       property="orderId"/>
+        <result column="o_g_code"   property="orderGoodsCode"/>
+        <result column="o_amount"   property="orderAmount"/>
+        <result column="o_reg_date" property="orderRegDate"/>
+        <result column="o_total"    property="orderTotal"/>
+
+        <!-- member 테이블 -->
+        <association property="memberInfo" javaType="member">
+            <id     column="m_id"       property="memberId"/>
+            <result column="m_pw"       property="memberPassword"/>
+            <result column="m_name"     property="memberName"/>
+            <result column="m_level"    property="memberLevel"/>
+            <result column="m_email"    property="memberEmail"/>
+            <result column="m_addr"     property="memberAddr"/>
+            <result column="m_reg_date" property="memberRegDate"/>
+        </association>
+        <!-- goods 테이블 -->
+        <association property="goodsInfo" javaType="goods">
+            <id     column="g_code"      property="goodsCode"/>
+            <result column="g_name"      property="goodsName"/>
+            <result column="g_price"     property="goodsPrice"/>
+            <result column="g_seller_id" property="goodsSellerId"/>
+            <result column="g_reg_date"  property="goodsRegDate"/>
+        </association>
+
+    </resultMap>
+
+    <select id="getOrderList" resultMap="orderResultMap">
+        SELECT
+            tbo.o_num,
+            tbo.o_id,
+            tbm.m_name,
+            tbo.o_g_code,
+            tbg.g_name,
+            tbg.g_price,
+            tbo.o_amount,
+            ifnull((tbo.o_amount * tbg.g_price), 0) as o_total,
+            tbo.o_reg_date
+        FROM
+            (tb_order AS tbo
+            INNER JOIN
+            tb_member AS tbm
+            ON
+            tbo.o_id = tbm.m_id)
+            INNER JOIN
+            tb_goods AS tbg
+            ON
+            tbg.g_code = tbo.o_g_code;
+    </select>
+</mapper>

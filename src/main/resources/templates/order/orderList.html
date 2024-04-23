@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+                layout:decorate="~{layout/default}">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h1style.css}">
+</head>
+
+<th:block layout:fragment="customContent">
+    <h1 th:text="${title}"></h1>
+    <table>
+        <thead>
+        <tr>
+            <th>주문 번호</th>
+            <th>주문자 아이디</th>
+            <th>주문자 이름</th>
+            <th>상품 코드</th>
+            <th>상품명</th>
+            <th>상품 가격</th>
+            <th>구매 수량</th>
+            <th>금액</th>
+            <th>주문 일자</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:unless="${orderList != null}">
+                <td colspan="11">등록된 주문의 정보가 없습니다</td>
+            </tr>
+            <tr th:if="${orderList != null}"
+                th:each="list : ${orderList}"
+                th:with="m=${list.memberInfo},g=${list.goodsInfo}">
+                <td th:text="${list.orderNumber}">주문번호</td>
+                <td th:text="${list.orderId}">주문자아이디</td>
+                <td th:text="*{m.memberName}">주문자이름</td>
+                <td th:text="${list.orderGoodsCode}">주문자상품코드</td>
+                <td th:text="${g.goodsName}">상품명</td>
+                <td th:text="${'₩'+#numbers.formatInteger(g.goodsPrice,3,'COMMA') + '원'}">상품가격</td>
+                <td th:text="${list.orderAmount}">구매수량</td>
+                <td th:text="${'₩'+ #numbers.formatDecimal(list.orderTotal, 0, 'COMMA', 0, 'POINT') + '원'}">금액</td>
+                <td th:text="${list.orderRegDate}">주문일자</td>
+                <td><a th:href="@{/order/modifyOrder(orderId=${list.orderNumber})}">수정</a></td>
+                <td><a th:href="@{/order/removeOrder(orderId=${list.orderNumber})}">삭제</a></td>
+            </tr>
+        </tbody>
+    </table>
+</th:block>
+<th:block layout:fragment="customJsFile">
+    <script th:src="@{/js/jquery-3.7.1.js}"></script>
+</th:block>
+<th:block layout:fragment="customJs">
+    <script>
+
+    </script>
+</th:block>

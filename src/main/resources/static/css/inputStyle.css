@@ -1,0 +1,20 @@
+input {
+    width: 98%;
+    height: 20px;
+}
+
+tbody button {
+    width: 98%;
+    height: 25px;
+}
+
+tbody select {
+    width: 99%;
+    height: 25px;
+    text-align: center;
+}
+
+tfoot button {
+    width: 49%;
+    height: 25px;
+}

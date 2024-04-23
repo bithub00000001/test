@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+                layout:decorate="~{layout/default}">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h1style.css}">
+</head>
+
+<th:block layout:fragment="customContent">
+    <h1 th:text="${title}"></h1>
+    <table>
+        <thead>
+        <tr>
+            <th>판매자 번호</th>
+            <th>판매자 아이디</th>
+            <th>판매자 이름</th>
+            <th>판매자 이메일</th>
+            <th>상품 코드</th>
+            <th>상품명</th>
+            <th>상품가격</th>
+            <th>상품 등록 일자</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:unless="${sellerList != null}">
+                <td colspan="9">등록된 판매자가 없습니다</td>
+            </tr>
+            <th:block th:if="${sellerList != null}"
+                th:each="list, outterStat: ${sellerList}">
+                <th:block th:unless="${#lists.isEmpty(list.goodsList)}"
+                          th:each="goodsList, innerStat : ${list.goodsList}">
+                    <tr>
+
+                        <th:block th:if="${innerStat.first}">
+                            <td th:rowspan="${innerStat.size}" th:text="${outterStat.count}">순번</td>
+                            <td th:rowspan="${innerStat.size}" th:text="${list.memberId}">판매자아이디</td>
+                            <td th:rowspan="${innerStat.size}" th:text="${list.memberName}">판매자이름</td>
+                            <td th:rowspan="${innerStat.size}" th:text="${list.memberEmail}">판매자이메일</td>
+                        </th:block>
+                        <td th:text="${goodsList.goodsCode}">상품코드</td>
+                        <td th:text="${goodsList.goodsName}">상품명</td>
+                        <td th:text="${#numbers.formatInteger(goodsList.goodsPrice, 3, 'COMMA')}">상품가격</td>
+                        <td th:text="${goodsList.goodsRegDate}">상품등록일자</td>
+                    </tr>
+                </th:block>
+                <th:block th:if="${#lists.isEmpty(list.goodsList)}">
+                    <tr>
+                        <td th:text="${outterStat.count}">순번</td>
+                        <td th:text="${list.memberId}">판매자아이디</td>
+                        <td th:text="${list.memberName}">판매자이름</td>
+                        <td th:text="${list.memberEmail}">판매자이메일</td>
+                        <td colspan="4">등록된 상품이 없습니다.</td>
+                    </tr>
+                </th:block>
+            </th:block>
+        </tbody>
+    </table>
+</th:block>
+<th:block layout:fragment="customJsFile">
+</th:block>
+<th:block layout:fragment="customJs">
+    <script>
+
+    </script>
+</th:block>
